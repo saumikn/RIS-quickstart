@@ -1,0 +1,11 @@
+name: custom-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - cudatoolkit
+  - cudnn
+  - numpy
+  - pip
+  - pip:
+      - tensorflow==2.8
