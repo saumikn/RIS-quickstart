@@ -1,7 +1,6 @@
 dependencies:
   - jupyterlab
   - ipywidgets
-  - nb_conda_kernels
   - pip
   - pip:
       - jupyterlab-nvdashboard
