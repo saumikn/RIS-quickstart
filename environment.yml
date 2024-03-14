@@ -1,11 +1,15 @@
-name: custom-env
+name: quickstart-env
 channels:
-  - conda-forge
+  - conda-forge # This channel has most of the packages you'll need to install 
 dependencies:
-  - python=3.10
-  - cudatoolkit
-  - cudnn
+  - python=3.10 # You usually don't have to specify the version of Python, this is just an example
+  - ipykernel # Required in order to get Jupyter to work, probably not for your actual code
+  - tensorflow=2.8 # Tensorflow 2.8 is the latest version I've gotten working on the RIS Cluster
+  - cudatoolkit # Only necessary if you're using GPU code with tensorflow
+  - cudnn # Only necessary if you're using GPU code with tensorflow
   - numpy
+  - pytorch::pytorch=1.13 # Using the pytorch channel instead of conda-forge. Pytorch 1.13 is the latest version I've gotten working on the RIS Cluster
   - pip
   - pip:
-      - tensorflow==2.8
+      # - tensorflow==2.8
+      - chess
