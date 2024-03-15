@@ -1,8 +1,4 @@
-
-
 if __name__ == '__main__':
-    
-    
     
     print('Importing Numpy')
     import numpy as np
