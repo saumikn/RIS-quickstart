@@ -6,119 +6,205 @@ First, you will need to get access to the RIS Cluster. Each faculty gets 5TB of 
 
 ## Task 2: Using the Compute Environment
 
-To access the RIS cluster, you will need to be on the WashU VPN. Instructions on how to do so can be found at https://it.wustl.edu/items/connect/.
+To access the RIS cluster, you will need to perform the following steps.
 
-Once you're on the VPN (and you have access to the compute cluster), you can SSH into the compute environment with the command `ssh <wustl-key>@compute1-client-<N>.ris.wustl.edu`, where `<key>` is your official WUSTL key, and `<N>` can be any number from 1 to 4 (e.g. `saumik@compute1-client-4.ris.wustl.edu`).
+1. If you are off-campus, you will need to be on the WashU VPN. Instructions on how to do so can be found at https://it.wustl.edu/items/connect/.
+2. You should open a terminal on your computer, and SSH into the compute environment with the command `ssh <wustl-key>@compute1-client-<N>.ris.wustl.edu` where `<key>` is your official WUSTL key, and `<N>` can be any number from 1 to 4
+   - e.g. `saumik@compute1-client-4.ris.wustl.edu`
 
 The only reason you needed to SSH into the compute environment was to set up your account for the first time. At this point, I will be recommending that most people use Open OnDemand to access their code, rather than SSH. If you want to use the terminal, skip ahead to Task 11.
 
 ## Task 3: Using Open OnDemand
 
-Now that you have SSHed into your account, you have access to [OpenOnDemand](https://ood.ris.wustl.edu/). This is a platform managed by RIS which gives you access to Jupyter Lab, RStudio, Matlab, and other computational tools you might use. To get started, go to https://ood.ris.wustl.edu/.
+Now that you have SSHed into your account, you have access to [OpenOnDemand](https://ood.ris.wustl.edu/). This is a platform managed by RIS which gives you access to Jupyter Lab, RStudio, Matlab, and other computational tools you might use. To get started, do the following steps.
 
-To create a Jupyter Lab instance, click on the `Interactive Apps → Jupyter Notebook` button at the top of the page. Then, you should submit a form with the following parameters:
-
-- `Mounts`: You should paste in the following text: `/scratch1/fs1/<faculty-id>:/scratch1/fs1/<faculty-id> /storage1/fs1/<faculty-id>/Active:/storage1/fs1/<faculty-id>/Active`. When getting access to RIS, you should have been told what your advisor's `<faculty-id>` is. Note that this is not necessarily the same as their WUSTL Key.
-- `Job Group`: You can leave the default option as is, which should be something like `<wustl-key>/ood`
-- `User Group`: You should select the dropdown option which has your advisor's `<faculty-key>`, which should be something like `compute-<faculty-key>`
-- `Queue`: You should use `general`. `general-interactive` is also an option, but I haven't tested it with GPUs.
-- `SLA Name`: Leave this empty unless your advisor tells you to put something here
-- `Memory`: Request as much memory as you think you'll need. If you request too much memory which isn't available on the cluster, your job will be stuck in a pending state. `16GB` is a reasonable amount of memory to start with. If you find that your code keeps crashing due to lack of memory, you can increase this amount as needed.
-- `Number of Hours`: How long your Jupyter Instance will run before being automatically killed by the server. You can request up to `672` hours (i.e. 28 days), but please don't just leave a job running if you're not making use of the resources, you're taking away the resources from somebody else.
-- `GPUs to Allocate`: If your code makes use of GPUs, put `1` here. If your code doesn't use GPUs, put `0`. You could request up to `4` in this slot, but unless you are really smart with your code, you will probably not be able to make use of more than one GPU at a time.
-- `GPU Model Type`: You should use `Tesla V100 (32GB SXM2)`. `NVIDIA A40` is potentially an option, but I haven't been able to get them to work personally.
-- `Number of Processors`: This represents the number of CPUs assigned to your job. If your code doesn't make use of multiprocessing, you will not be able to make use of more than `1` or `2`. If you do make use of multiprocessing, you can put up to `40` here, but the higher the number, the longer it may take for your job to land.
-- `Enable MPI`: Don't check this unless your code requires `MPI`
-- `Use JupyterLab`: Click this, Jupyter Lab is a much nicer interface than Jupyter Notebook
-- `Custom Jupyter Notebook Directory`: I leave this blank, you can change this if it's helpful for you.
-
-Once you've selected all your parameters, go ahead and launch your notebook by clicking the `Launch` button. Afterwards, you'll be automatically taken to a new page with all of your running interactive sessions. If you leave this page, you can always get back to it by going to https://ood.ris.wustl.edu and clicking the `My Interactive Sessions` button at the top of the page.
-
-Afterwards, you can open your Jupyter Lab environment by clicking the blue `Connect to Jupyter` button on your job, and you're in!
+1. Go to https://ood.ris.wustl.edu/
+2. To create a Jupyter Lab instance, click on the `Interactive Apps → Jupyter Notebook` button at the top of the page.
+3. On the resulting page, fill out the following parameters:
+   - `Mounts`: You should paste in the following text: `/scratch1/fs1/<faculty-id>:/scratch1/fs1/<faculty-id> /storage1/fs1/<faculty-id>/Active:/storage1/fs1/<faculty-id>/Active`.
+     - When you first got access to RIS, you should have been told what your advisor's `<faculty-id>` is. This is not necessarily the same as their WUSTL Key.
+     - If you are using the ArtSci compute conda instead of a faculty's storage, you might not have access to `/scratch1`. Instead, you should probably use this as your input: `/storage1/fs1/artsci/Active/<wustl-key>:/storage1/fs1/artsci/Active/<wustl-key>`
+   - `Job Group`: You can leave the default option as is, which should be something like `<wustl-key>/ood`
+   - `User Group`: You should select the dropdown option which has your advisor's `<faculty-key>`, which should be something like `compute-<faculty-key>`
+   - `Queue`: You should use `general`. `general-interactive` is also an option, but I haven't tested it with GPUs.
+   - `SLA Name`: Leave this empty unless your advisor tells you to put something here
+   - `Memory`: Request as much memory as you think you'll need. If you request too much memory which isn't available on the cluster, your job will be stuck in a pending state. `16GB` is a reasonable amount of memory to start with. If you find that your code keeps crashing due to lack of memory, you can increase this amount as needed.
+   - `Number of Hours`: How long your Jupyter Instance will run before being automatically killed by the server. You can request up to `672` hours (i.e. 28 days), but please don't just leave a job running if you're not making use of the resources, you're taking away the resources from somebody else.
+   - `GPUs to Allocate`: If your code makes use of GPUs, put `1` here. If your code doesn't use GPUs, put `0`. You could request up to `4` in this slot, but unless you are really smart with your code, you will probably not be able to make use of more than one GPU at a time.
+   - `GPU Model Type`: You should use `Tesla V100 (32GB SXM2)`. `NVIDIA A40` is potentially an option, but I have not tested this myself.
+   - `Number of Processors`: This represents the number of CPUs assigned to your job. If your code doesn't make use of multiprocessing, you will not be able to make use of more than `1` or `2`. If you do make use of multiprocessing, you can put up to `32` here, but the higher the number, the longer it may take for your job to land.
+   - `Enable MPI`: Don't check this unless your code requires `MPI`
+   - `Use JupyterLab`: Click this, Jupyter Lab is a much nicer interface than Jupyter Notebook
+   - `Custom Jupyter Notebook Directory`: I leave this blank, you can change this if it's helpful for you.
+4. Once you've selected all your parameters, go ahead and launch your notebook by clicking the `Launch` button. This will take you to a new page with all your running sessions
+5. At first, your session will have a grey background and say "Queued". If you didn't request too much RAM or GPUs or CPUs, your job should land within a minute or two
+6. Once your job lands, it will have a blue background and say "Pending". You will have to continue waiting for a few minutes while your environment sets up.
+7. Once your job finishes seting up, it will have a green background and be ready! You can open the environment by clicking on the blue `Connect to Jupyter` button on your job
+   - If you leave this page, you can always get back to it by going to https://ood.ris.wustl.edu and clicking the `My Interactive Sessions` button at the top of the page.
 
 ## Task 4: Run your first Python Script
 
-Once you've connected, you'll be presented with the Jupyter Lab interface. If you've never used Jupyter Lab before, I'll give a quick intro and explain
+Once you've connected, you'll be presented with the Jupyter Lab interface. If you've never used Jupyter Lab before, here's a quick intro:
 
-Once you are inside Jupyter Lab, you should see the Launcher taking up most of the screen. You should also see a file explorer sidebar at the left showing all your files (which may be empty if you haven't used RIS before), and a few action buttons at the top left: A blue plus, which opens new Launchers, a New Folder button, an Upload Button, and a Refresh Button.
+At first, you should see the Launcher taking up most of the screen. You should also see a file explorer sidebar at the left showing all your files (which may be empty if you haven't used RIS before), and a few action buttons at the top left: A blue plus, which opens new Launchers, a New Folder button, an Upload Button, and a Refresh Button.
 
-Now that you're a little familiar with the Jupyter Lab interface, it's time to start running code :).
+Now that you're a little familiar with the Jupyter Lab interface, it's time to start running code.
 
-1. Open a new terminal using the Launcher. At the prompt, you should see something like `(base) <wustl-key>@compute1-exec-216:~$`
+1. Open a new terminal using the Launcher. At the prompt, you should see something like `<wustl-key>@compute1-exec-216:~$`
 2. Run the command `git clone git@github.com:saumikn/RIS-quickstart.git`. This will download all of the files needed for this tutorial, and save them into the `RIS-quickstart` directory (i.e. folder).
 3. Enter into this directory in your terminal with the command `cd RIS-quickstart`
-4. In your terminal, run the command `python 01-python-script.py`
-5. Once you do this, you'll get a progress bar in your terminal that shows you the status of your code, which should take about a second to run. Afterwards, you can read the output of the code by opening the `RIS-quickstart` folder in the file browser, and then opening the `01-output.txt` file.
+4. Load the base Conda environment with `conda activate base`.
+   - I will explain how Conda works in Task 6 - just go with it for now :)
+   - Once you do this, your prompt should say something like `(base) <wustl-key>@compute1-exec-216:~/RIS-quickstart$`
+5. Open up the `task-04.py` Python file by navigating to `RIS-quickstart` in the file browser, and double clicking on the file name
+   - Nothing specific for you to do here, just good practice to look at what you're running before you run it
+   - In this case, you should see that this script is simply computing the first 30 Fibonacci numbers
+6. Back in your terminal, run the command `python task-04.py`
+7. Once you do this, you'll get a progress bar in your terminal that shows you the status of your code, which should take about a second to run.
+8. Afterwards, you can read the output of the code by opening the `RIS-quickstart` directory in the file browser, and then opening the `01-output.txt` file.
+9. Because this output is so small, it's fine to save the output in the home directory (i.e. anywhere inside the `~` directory). If this output was expected to be very large, it would be better to save the output in RIS Storage. To do this, comment out line 12 and uncomment line 13. Then, rerun the script.
+10. You can't open files saved in RIS Storage directly, but you can use the terminal to view the files. For example, you can do this with the command `cat /storage1/fs1/<faculty-key>/Active/01.txt`
 
 ## Task 5: Run your first Jupyter Notebook
 
 Running code in Jupyter is almost as easy.
 
-1. First, you should open the `02-jupyter-notebook.ipynb` file, by double clicking on it in the file browser.
+1. First, you should open the `task-05.ipynb` file, by double clicking on it in the file browser.
 2. By default, the notebook will try to open in the `base` conda kernel. However, I'm currently encountering a bug and this kernel doesn't load. To fix this, you can click on the `base` or `No Kernel` button at the top left of the screen, and instead select the `Python 3` kernel. The choice of which kernel you use determines which Conda environment your code runs with. We'll explain more about this in the next step.
 3. Then, you can run your code by clicking the `Run → Run All Cells` button in the menu options.
 4. Once the code finishes running, you can view the output saved to `02-output.txt`.
+5. You can instead edit the code to save output file in RIS Storage instead of your home directory.
 
 ## Task 6: Build your first Conda Environment
 
 Both of these options worked easily and you were able to run the code which I've provided. However, these programs were very simple, and only required Python itself. Most interesting Data Science code you write will require additional packages such as `Pandas`, `Tensorflow`, or `Matplotlib`. These need to be downloaded and installed on your system first before you can use them. In order to manage these packages, and anything else you might need, we're going to use a tool called Conda. Using Conda, we can specifiy in an `environment.yml` file exactly which packages are required to run your code, making your code much more maintanable and replicable by others.
 
-First, you need to run the following four commands. These commands are something specific to the RIS platform and allow you to save Conda environments directly to your storage cluster at `/storage1/fs1/` which has a capacity of at least 5TB, rather than your home directory which can only store 10GB. **You only need to run these commands a single time when you first set up RIS, not every time you create a new environment.**. You should edit the commands with your specific `<faculty-id>` and then run the commands one at a time in your terminal.
+### Commands to set up Conda on RIS (only have to do once ever)
 
-- `mkdir -p /storage1/fs1/<faculty-id>/Active/.conda/pkgs`
-- `conda config --add pkgs_dirs /storage1/fs1/<faculty-id>/Active/.conda/pkgs`
-- `mkdir -p /storage1/fs1/<faculty-id>/Active/.conda/envs`
-- `conda config --add envs_dirs /storage1/fs1/<faculty-id>/Active/.conda/envs`
-- `conda config --set env_prompt '({name})'`
+First, you need to run the following five commands. These commands are something specific to the RIS platform and allow you to save Conda environments directly to your storage cluster at `/storage1/fs1/` which has a capacity of at least 5TB, rather than your home directory which can only store 10GB. **You only need to run these commands a single time when you first set up RIS, not every time you create a new environment.** You should edit the commands with your specific `<faculty-id>` and then run the commands one at a time in your terminal.
 
-Next, we're going to build a single environment which has already been predefined in the `environment.yml` file included in the `RIS-quickstart` folder. In order to do this, you must run the following commands.
+1. `mkdir -p /storage1/fs1/<faculty-id>/Active/.conda/pkgs`
+2. `conda config --add pkgs_dirs /storage1/fs1/<faculty-id>/Active/.conda/pkgs`
+3. `mkdir -p /storage1/fs1/<faculty-id>/Active/.conda/envs`
+4. `conda config --add envs_dirs /storage1/fs1/<faculty-id>/Active/.conda/envs`
+5. `conda config --set env_prompt '({name})'`
 
-1. First, you should take a look inside the `environment.yml` file just to understand how the file is structured.
+### Commands to create a new Conda Environment (must repeat for every new Conda Environment you want to create)
+
+Next, we're going to build a single environment which has already been predefined in the `environment.yml` file included in the `RIS-quickstart` directory. In order to do this, you must run the following commands.
+
+1. First, you should open the `environment.yml` file just to understand how the file is structured.
    - `name` refers to the name of the environment, how Conda distinguishes it from other environments
    - `channels` tells Conda where to look to download from. Almost all code you will ever need is available in `conda-forge`, but you can specify a different channel here if you like.
    - `dependencies` defines which packages need to be installed from Conda. You can specify an version of a package with `=` (e.g. `python=3.10`) or with `<` or `>`. Otherwise, Conda will download the latest possible version
-   - `pip` defines which packages need to be installed from Pip. You can specify a version of a package with `==` (e.g. `tensorflow==2.8`).
+   - `pip` defines which packages need to be installed from Pip. You can specify a version of a package with `==` (e.g. `chess==1.9.4`).
    - In general, if you can download a package from either Conda or Pip, you should choose Conda, unless you have a reason to choose Pip (either Conda somehow breaks things or the package itself recommends pip for some reason)
-2. Next, run `mamba env create -f environment.yml -v`. This may take several minutes to run, as Conda will need to download a bunch of new Python packages totaling several GBs, and then install them into a new environment it's creating.
-   - You could also run `conda env create -f environment.yml -v`, but using `mamba` is faster.
-3. Once it's finished installing, you can enter the environment with `conda activate <env-name>` (e.g. `conda activate quickstart-env`)
-4. The first time you create an environment, you will need to run the following two lines to make sure your terminal and Jupyter are properly set up to run code in this environment.
-   - To set up Jupyter, run `python -m ipykernel install --user --name <env-name> --env LD_LIBRARY_PATH $CONDA_PREFIX/lib`
-   - To set up your terminal, run `conda env config vars set LD_LIBRARY_PATH=$CONDA_PREFIX/lib`. When you do this, it will probably ask you to reactivate your environment with `conda activate <env-name>`, and you should do this
+2. Next, run `mamba env create -f environment.yml -v`. This will take around 10 minutes to run, as Conda will need to download a bunch of new Python packages totaling several GBs, and then install them into a new environment it's creating.
+   - You could also run `conda env create -f environment.yml -v`, which will give you the same thing in the end, but `mamba` is significantly faster than `conda`.
+3. Once it's finished installing, you can enter the environment with `conda activate <env-name>`, filling in `<env-name>`
+   - e.g. `conda activate quickstart-env`
+4. To set up Jupyter, run `python -m ipykernel install --user --name <env-name> --env LD_LIBRARY_PATH $CONDA_PREFIX/lib`, filling in `<env-name>`
+   - e.g. `python -m ipykernel install --user --name quickstart-env --env LD_LIBRARY_PATH $CONDA_PREFIX/lib`
+5. To set up your terminal, run `conda env config vars set LD_LIBRARY_PATH=$CONDA_PREFIX/lib`.
+   - When you do this, it will probably ask you to reactivate your environment with `conda activate <env-name>`, and you should do this as well
 
 ## Task 7: Run a Python Script in your Conda Environment
 
-Running a Python script in your custom Conda Environment is just as easy as running it in the base environment (Step 5). All you need to do ensure that your terminal is currently activated with the intended environment. You can tell which environment you're in based on the terminal prompt. If the prompt starts with `(conda)` or `(base)`, it means you're in the `base` enviornment that ships with Conda, which contains almost no packages outside of Python itself. If the prompt starts with anything else (e.g. `(quickstart-env)`), it means you're in the environment with that name. If you want to switch to a new environment, just use the `conda activate <env-name>` command.
+Running a Python script in your custom Conda Environment is just as easy as running it in the base environment (Step 5). All you need to do ensure that your terminal is currently activated with the intended environment. You can tell which environment you're in based on the terminal prompt. If the prompt starts with `(conda)` or `(base)`, it means you're in the `base` enviornment that ships with Conda, which contains almost no packages outside of Python itself. If the prompt starts with anything else (e.g. `(quickstart-env)`), it means you're in the environment with that name. If your prompt does not contain anything like this, you are not in a Conda environment.
 
-Once you're in the `quickstart-env` environment that you just built, run the Python script I've written with `python 03-python-script.py`. (TODO)
+To run a script, run the following commands:
 
-What happens if you try running this script in the base environment? Go ahead and try it by running `conda activate base` and `python 03-python-script.py`.
+1. Enter your Conda environment with `conda activate <env-name>`, filling in `<env-name>`
+   - e.g. `conda activate quickstart-env`
+   - You will get a WARNING that you are overwriting environment variables set in the machine. You can ignore this, as we explicitly set up this behavior earlier when we ran the `conda env config vars set LD_LIBRARY_PATH=$CONDA_PREFIX/lib` command in the last step
+   - Once you do this, your prompt should say something like `(quickstart-env) <wustl-key>@compute1-exec-216:~/RIS-quickstart$ `
+2. Run the Python script with `python task-07.py`
+
+What happens if you try running this script in the base environment? Go ahead and try it by running `conda activate base` and `python task-07.py`.
 
 ## Task 8: Run a Jupyter Notebook in your Conda Environment
 
-Running a Jupyter Notebook in your custom Conda Environment is also easy. Once you've opened a notebook, you can use the `Kernel → Change Kernel` option in the menu at the top to select which Conda environment you want to run your code with. You can always check which environemnt you're currently using with the button at the top right.
+Running a Jupyter Notebook in your custom Conda Environment is also easy.
 
-You can test this out by opening the `python 04-jupyter-notebook.py` file in Jupyter. the Once you've selected the `quickstart-env` kernel, run the entire notebook with `Run → Run All Cells`. (TODO)
+1. Open the `task-08.py` notebook by double clicking on the file inside of the `RIS-quickstart` directory in the file explorer
+2. By default, Jupyter may open your notebook in the base environment instead of your custom environment. You can check which environment you're in with the button at the top right, which will either say `quickstart-env` or `base` or `Python 3`.
+3. Switch to the `quickstart-env` envrionment by clicking on the button at the top right, and selecting `quickstart-env` in the dropdown
+   - When you first select an environment, you will see a grey circle with a lightning bolt in the center. This means your environment is loading, and you can't run anything yet
+   - Once your environment finishes loading, the symbol will turn into a white circle instead. Whenever you see a white circle, this means your environment is ready to run code
+   - If your notebook is in the middle of running code, this symbol will be a grey circle
+4. You can run the entire notebook by clicking on the `Run → Run All Cells` button.
+   - You can also run cells one at a time by either clicking on the grey triangle in the toolbar, or using the `Shift+Enter` keyboard shortcut. These will run whichever cell you have selected, highlighted with a blue bar
 
 ## Task 9: Update your Conda Environment with new Packages
 
-If you've already created your environment and you want to add new packages, the easiest option is to simply edit your `environment.yml` file, and then run `mamba env update --f environment.yml -v --prune`. (You could also use `conda` instead of `mamba`, but `mamba` is faster). If you're able to update your code successfully, you're done!
+If you've already built a Conda environment and need to add additional dependencies to your project, you have two options.
 
-Occassionally, using this approach will give you an error, due to conflicting environment setups. If this happens, you should just delete your current environment and recreate it from scratch. To do this, run the following steps:
+### Update the existing environment
 
-1. If you're currently in the environment you want to delete, run `conda deactivate`
-2. Delete the environment with `conda remove --name <env-name> --all` and then `jupyter kernelspec uninstall <env-name>`
-3. Recreate the new environment with the steps listed above
+The easiest option is to just edit your enviroment with the following commands
+
+1. Edit your `environment.yml` file with your intended changes
+2. Run `mamba env update --f environment.yml -v --prune`
+   - You can also use `conda` instead of `mamba`, and both will give you the same thing in the end, but `mamba` is faster
+
+### Delete the environment and recreate
+
+Occassionally, the above approach will give you an error, for whatever reason. If this happens, the next easiest option is to delete your current environment and recreate it from scratch. To do this, run the following steps:
+
+1. Enter the environment you want to delete with `conda activate <env-name>`, filling in `<env-name>`
+   - e.g. `conda activate quickstart-env`
+2. Unlink the environment from Jupyter with `jupyter kernelspec uninstall <env-name>`, filling in `<env-name>`
+   - e.g. `jupyter kernelspec uninstall quickstart-env`
+   - This step essentially undoes the command entered earlier in Task 6 of `python -m ipykernel install --user --name <env-name> --env LD_LIBRARY_PATH $CONDA_PREFIX/lib`
+3. Deactivate the environment you want to delete with `conda deactivate`
+4. Delete the environment you want to delete with `conda remove --name <env-name> --all`, filling in `<env-name>`
+   - e.g. `conda remove --name quickstart-env --all`
+5. Recreate the new environment by following all of the steps in Task 6, in the section on "Commands to create a new Conda Environment"
 
 ## Task 10: Test your Skills with Conda!
 
-I've created a Jupyter Notebook file called `05-jupyter-notebook.ipynb`. Your task is to modify your `environment.yml` to build an environment which can run the `05-jupyter-notebook.ipynb` file without any errors. In addition, you should try to make your `environment.yml` file as small and self-contained as possible. You should try to only list Python packages that you explicitly need in your code, and remove all dependencies which aren't necessary for your code! (TODO)
+I've created a Jupyter Notebook file called `task-10.ipynb`. Your task is to create a new Conda environment which can run the `task-10.ipynb` file without any errors. In addition, you should try to make your environment file as small and self-contained as possible. You should try to only list Python packages that you explicitly need in your code, and remove all dependencies which aren't necessary for your code!
+
+For this exercise, you should practice updating your existing `environment.yml` files using the steps listed in Task 9. However, it should be noted that in general it is better practice to have entirely different `environment.yml` for each seperate projects (each located in seperate directories), rather than a single Conda environment which can run multiple projects. Otherwise, you wouldn't be able to run e.g. `task-08.ipynb` and `task-10.ipynb` at the same time, since both require mostly different dependencies, and sharing your work becomes more difficult.
 
 ## Task 11: Submitting Python Jobs to the Cluster
 
-(TODO)
+Sometimes, you will want to run the same Python script with many different parameters. You could do this inside Jupyter Lab, but this could get cumbersome if you have hundreds or thousands of parameters you want to run. Instead, we can submit this Python script as a seperate _job_ on the RIS cluster. This will allow us to easily manage multiple parameters, and allow us potentially use more resources, simultaneously, allowing us to finish running our code faster
 
-## Task 11: Using Docker instead of Open OnDemand
+As an example, we will demonstrate how to submit the `task-11.py` script as seperate jobs, so we can run run the code simultanously, with different parameters. If you take a look inside the `task-11.py` file, you will see that this script takes in a single parameter, `shape`, creates a random matrix in Pytorch with that shape, loads the matrix on either the CPU or GPU depending on availability, performs a number of matrix operations on it, saves the matrix to our RIS Storage, and prints the runtime.
+
+Here are the steps for how to submit `task-11.py` as jobs.
+
+1. Open the `task-11.py` script and edit the script to point to the correct RIS Storage path
+   - Takes in a single parameter, `shape`
+   - Creates a random matrix in Pytorch with that shape
+   - Loads the matrix on either the CPU or GPU depending on availability
+   - Performs 100 matrix operations on it
+   - Times how long the operations takes
+   - Saves the matrix to our RIS storage (make sure to edit the `output_folder` parameter)
+2. Open the `task-11-gpu.sh` file, and edit the parameters to point to the correct RIS Storage path and use your correct `<wustl-key>`
+   - You should also read the comments to understand what each of the other parameters represent
+3. Run `mkdir -p /storage1/fs1/<faculty-id>/Active/quickstart/job_output`, as the `-o` parameter in `task-11-gpu.sh` requires this directory to exist.
+4. Run `bgadd -L 100 /<wustl-key>/limit100`. This will create a new fair share allocation group for you so you can run up to 100 jobs simultaneously.
+   - Don't misuse this, or RIS can remove your access to the Compute Cluster
+5. In your terminal, run the command `unset LSF_DOCKER_PORTS`. Otherwise, you will not be able to submit the jobs.
+6. Finally, you can submit the jobs with `bash task-11-gpu.sh`
+   - Random note, submitting these jobs may create a file in your `RIS-quickstart` directory called `lib_check`, containing the ominous sounding text `Die will Fire...`. I don't know what this file does, or what it means, but I don't think it's a problem.
+7. While your jobs are running, you can use the command `bjobs -w | sort` to view all the jobs you've created, and their status (if it's pending or running)
+8. Once your job is running, you can view the current output with `bpeek <job-id>`. This command will not work once your job finishes
+9. When your jobs finish, you will get an email with a summary of your job and some statistics.
+10. To view the output of your jobs, enter the job output directory with `cd /storage1/fs1/<faculty-id>/Active/quickstart/job_output`. You can then see the names of all the files in this directory with the `ls -lh` command. You can then view a specific job's output with the command `cat <file-name>`
+11. We can then view the data created by these commands by going to `cd /storage1/fs1/<faculty-id>/Active/quickstart/data_processed/gpu` and typing in `ls -lh`. The actual data is not in a human-readable format, but you can at least see how large each file is.
+    - What do you notice about the file sizes?
+12. Next, we can try doing the same process, but submitting our code as CPU-only rather than running our code on a GPU. First, open the `task-11-cpu.sh` file, and edit the parameters as needed
+13. Then, run the script with `bash task-11-cpu.sh` (making sure to go back to the `RIS-quickstart` directory first with `cd ~/RIS-quickstart`)
+14. Once the jobs are done, you can view the data output at `/storage1/fs1/<faculty-id>/Active/quickstart/data_processed/cpu`
+    - Are the file sizes different with the gpu-created files? Why or why not?
+15. You can also view the job outputs at `/storage1/fs1/<faculty-id>/Active/quickstart/job_output`
+    - What do you notice about the runtimes for each file?
+    - Hint, try running `ls -v * | xargs -I{} grep -H "Function Runtime" {} | awk -F: '{printf "%-25s %s\n", $1":", $2":"$3}'`
+
+## Task 12: Using Docker instead of Open OnDemand
 
 At times, you may encounter a scenario where Open OnDemand doesn't work for your code. Maybe you need a different operating system instead of Ubuntu, or you need additional terminal commands such as `sudo`, or you need additional features in Jupyter such as Tensorboard or the NVIDIA GPU Dashboards. If any of these is true, you won't be able to use Open OnDemand, you'll have to build your own Docker image and run code for that.
 
