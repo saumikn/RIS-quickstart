@@ -11,6 +11,7 @@ To access the RIS cluster, you will need to perform the following steps.
 1. If you are off-campus, you will need to be on the WashU VPN. Instructions on how to do so can be found at https://it.wustl.edu/items/connect/.
 2. You should open a terminal on your computer, and SSH into the compute environment with the command `ssh <wustl-key>@compute1-client-<N>.ris.wustl.edu` where `<key>` is your official WUSTL key, and `<N>` can be any number from 1 to 4
    - e.g. `saumik@compute1-client-4.ris.wustl.edu`
+   - It should be noted that despite being called `compute1`, this is a "login" node, not a "compute" node. This means that you should not run any complicated code, you should instead use a "compute" node to run your code, using the steps either in Task 3, Task 11, or Task 12.
 
 The only reason you needed to SSH into the compute environment was to set up your account for the first time. At this point, I will be recommending that most people use Open OnDemand to access their code, rather than SSH. If you want to use the terminal, skip ahead to Task 11.
 
@@ -42,6 +43,17 @@ Now that you have SSHed into your account, you have access to [OpenOnDemand](htt
 7. Once your job finishes seting up, it will have a green background and be ready! You can open the environment by clicking on the blue `Connect to Jupyter` button on your job
    - If you leave this page, you can always get back to it by going to https://ood.ris.wustl.edu and clicking the `My Interactive Sessions` button at the top of the page.
 
+### Helpful commands if your job is stuck or exiting early
+
+If your job is stuck without landing, or your job lands and immediatly deletes itself, here are some commands you can try.
+
+1. SSH into the login node with `ssh <wustl-key>@compute1-client-<N>.ris.wustl.edu`
+2. Use `bjobs -wa` to show all of your current and recent jobs
+3. If your job hasn't landed yet (still grey), then run `bjobs -l <job-id>`, which will give you a reason for why your job hasn't landed yet
+4. If your job has landed but is still blue after more than 10-15 minutes of waiting, then you can run `bpeek <job-id>` to view the current status of the job.
+5. If your job exits right away, your job is crashing for some reason. You should run `cd ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/`, use `ls -lh` to find the most recently created folder, and `cd` into that folder. You can then view the output with `cat output.log` (or use `less output.log` if your file is really long. Exit `less` by typing in the letter `q`)
+   - One common scenario why jobs might crash immediatly is because storage1 is not set up correctly. If you try leaving the `Mounts` parameter empty and your new job doesn't crash, it means your RIS Storage hasn't been set up. Submit a ticket on RIS
+
 ## Task 4: Run your first Python Script
 
 Once you've connected, you'll be presented with the Jupyter Lab interface. If you've never used Jupyter Lab before, here's a quick intro:
@@ -51,7 +63,7 @@ At first, you should see the Launcher taking up most of the screen. You should a
 Now that you're a little familiar with the Jupyter Lab interface, it's time to start running code.
 
 1. Open a new terminal using the Launcher. At the prompt, you should see something like `<wustl-key>@compute1-exec-216:~$`
-2. Run the command `git clone git@github.com:saumikn/RIS-quickstart.git`. This will download all of the files needed for this tutorial, and save them into the `RIS-quickstart` directory (i.e. folder).
+2. Run the command `git clone https://github.com/saumikn/RIS-quickstart.git`. This will download all of the files needed for this tutorial, and save them into the `RIS-quickstart` directory (i.e. folder).
 3. Enter into this directory in your terminal with the command `cd RIS-quickstart`
 4. Load the base Conda environment with `conda activate base`.
    - I will explain how Conda works in Task 6 - just go with it for now :)
@@ -88,6 +100,7 @@ First, you need to run the following five commands. These commands are something
 3. `mkdir -p /storage1/fs1/<faculty-id>/Active/.conda/envs`
 4. `conda config --add envs_dirs /storage1/fs1/<faculty-id>/Active/.conda/envs`
 5. `conda config --set env_prompt '({name})'`
+   - Use this last command exactly, you shouldn't replace `{name}` with anything else
 
 ### Commands to create a new Conda Environment (must repeat for every new Conda Environment you want to create)
 
