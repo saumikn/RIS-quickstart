@@ -22,8 +22,6 @@ print(moves)
 print()
 
 
-
-
 #########################
 
 print('Importing Torch')

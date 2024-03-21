@@ -9,8 +9,8 @@ def fibonacci(n):
 
 if __name__ == '__main__':
     
-    # output_folder = "output"
-    output_folder = "/storage1/fs1/chien-ju.ho/Active/quickstart/output"
+    output_folder = "output"
+    # output_folder = "/storage1/fs1/<faculty-key>/Active/quickstart/output"
     
     Path(output_folder).mkdir(parents=True, exist_ok=True) # Create output folder if it doesn't exist already
 
