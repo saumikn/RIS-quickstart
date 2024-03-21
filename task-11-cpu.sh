@@ -24,12 +24,12 @@ bsub -n 1 \
 -q general \
 -m general \
 -G compute-chien-ju.ho \
--J ${SHAPE}_CPU \
--M 4GB \
+-J CPU_${SHAPE} \
+-M 16GB \
 -N \
 -u saumik@wustl.edu \
--o /storage1/fs1/chien-ju.ho/Active/quickstart/job_output/${SHAPE}_CPU.%J \
--R 'rusage[mem=4GB] span[hosts=1]' \
+-o /storage1/fs1/chien-ju.ho/Active/quickstart/job_output/CPU_${SHAPE}.%J.txt \
+-R 'rusage[mem=16GB] span[hosts=1]' \
 -g /saumik/limit100 \
 -a "docker(rapidsai/rapidsai:21.10-cuda11.0-runtime-ubuntu20.04-py3.8)" \
 "cd ~/RIS-quickstart && /storage1/fs1/chien-ju.ho/Active/.conda/envs/quickstart-env/bin/python task-11.py" ${SHAPE}

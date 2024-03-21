@@ -9,6 +9,7 @@ dependencies:
   - tensorflow=2.8        # Tensorflow 2.8 is the latest version I've gotten working on the RIS Cluster
   - cudatoolkit           # Only necessary if you're using GPU code with Tensorflow
   - cudnn                 # Only necessary if you're using GPU code with Tensorflow
+  - seaborn
   - pip                   # Necessary if you need to install packages through pip
   - pip:
       - chess
