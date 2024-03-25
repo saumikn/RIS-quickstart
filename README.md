@@ -236,8 +236,9 @@ In this section, I'm going to be a little more brief with my instructions, and I
 10. Download the `jupyter-gpu.sh` file from this Github repo
     - If you don't need to request a Jupyter Lab instance with a GPU, use `jupyter-cpu.sh` instead
 11. Edit the `jupyter-gpu.sh` command to refer to your advisor's `<faculty-id>`
-12. Launch a new Jupyter Lab instance by running the script `bash jupyter-gpu.sh` with whatever parameters you want to customize.
-    - For example, if you want to launch a job with 100GB of memory, a time limit of 24 hours, and 8 CPUs, you would use `bash jupyter-gpu.sh -m 100GB -t 24 -c 8`
+12. Launch a new Jupyter Lab instance by running the script `bash RIS-quickstart/jupyter-gpu.sh` with whatever parameters you want to customize.
+    - For example, if you want to launch a job with 100GB of memory, a time limit of 24 hours, and 8 CPUs, you would use `bash RIS-quickstart/jupyter-gpu.sh -m 100GB -t 24 -c 8`
+    - If you don't need a GPU, you would use `bash RIS-quickstart/jupyter-cpu.sh -m 100GB -t 24 -c 8`
 13. In order to check if your job has landed, use the `bjobs -w` command. Once your job lands, the job status will change from `PEND` to `RUN`
     - If your job is taking a really long time to land, you can use the `bjobs -l <job-id>` command to get a detailed description of your job, including the reason why it hasn't landed yet
     - I created a script called `cluster_status.py`, which allows you to view status of the cluster. You can run ith with `python3 cluster_status.py` (on the login nodes, Python 2 is still the default even though it's 2024). This script is very helpful to see how occupied the cluster is, and can tell you potentially why your jobs aren't landing, if there are open GPUs or CPUs, etc.
