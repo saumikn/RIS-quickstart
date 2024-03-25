@@ -8,17 +8,13 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Installing a set of useful Ubuntu terminal commands with the `apt-get install`.
 # If you've changed your OS from Ubuntu, this command will likely be different.
 RUN apt-get update --fix-missing \
-  && apt-get install -y wget curl bzip2 git vim build-essential \
-                        ca-certificates libglib2.0-0 libxext6 \
-                        libsm6 libxrender1 libstdc++6 python3-dev \
-                        cmake libboost-all-dev \
-                        nano sudo htop tmux unzip \
+  && apt-get install -y git vim wget curl openssh-server \
   && apt-get clean 
 
 # Installing and setting up miniforge (i.e. Conda)
-RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-Linux-x86_64.sh -O ~/mambaforge.sh && \
-  bash ~/mambaforge.sh -b -p /opt/conda && \
-  rm ~/mambaforge.sh && \
+RUN wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O ~/miniforge.sh && \
+  bash ~/miniforge.sh -b -p /opt/conda && \
+  rm ~/miniforge.sh && \
   /opt/conda/bin/conda init
 
 # Updating path variables to point to miniconda

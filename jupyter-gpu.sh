@@ -4,7 +4,7 @@
 facultyId="chien-ju.ho" 
 
 # Change this to your own Docker Repo ID. You can also edit with the -d tag
-docker="saumikn/quickstart:latest" 
+docker="saumikn/chesstrainer:maialib" 
 
 # How many hours your job runs for. You can edit this with the -t tag. Max of 672 hour for any job
 timeLimit="168"
@@ -63,4 +63,4 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-LSF_DOCKER_VOLUMES="/scratch1/fs1/$facultyId:/scratch1/fs1/$facultyId /storage1/fs1/$facultyId/Active:/storage1/fs1/$facultyId/Active" LSF_DOCKER_PORTS="$port:$port" PATH="/opt/conda/bin:/usr/local/cuda/bin:$PATH" bsub -q general -n $cores -M $memory -R "select[gpuhost,port$port=1] span[hosts=1] rusage[mem=$memory]" -G compute-$facultyId -J "jupyter-gpu-$tag" -gpu "num=$gpus:gmodel=$model:j_exclusive=$exclusive" -a "docker($docker)" -w ${timeLimit}:00 jupyter lab --allow-root --ip=0.0.0.0 --port $port --no-browser
+LSF_DOCKER_VOLUMES="/scratch1/fs1/$facultyId:/scratch1/fs1/$facultyId /storage1/fs1/$facultyId/Active:/storage1/fs1/$facultyId/Active" LSF_DOCKER_PORTS="$port:$port" PATH="/opt/conda/bin:/usr/local/cuda/bin:$PATH" bsub -q general -n $cores -M $memory -R "select[gpuhost,port$port=1] span[hosts=1] rusage[mem=$memory]" -G compute-$facultyId -J "jupyter-gpu-$tag" -gpu "num=$gpus:gmodel=$model:j_exclusive=$exclusive" -a "docker($docker)" -W ${timeLimit}:00 jupyter lab --allow-root --ip=0.0.0.0 --port $port --no-browser
